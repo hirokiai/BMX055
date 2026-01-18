@@ -12,10 +12,12 @@ while True:
     ax, ay, az = bmx.accel
     gx, gy, gz = bmx.gyro
     mx, my, mz = bmx.mag
+    roll, pitch, yaw = bmx.orientation()
 
     print("ACC:", ax, ay, az)
     print("GYR:", gx, gy, gz)
     print("MAG:", mx, my, mz)
+    print("ORI:", f"Roll:{roll:.2f}", f"Pitch:{pitch:.2f}", f"Yaw:{yaw:.2f}")
     print("----------------------")
 
     time.sleep_ms(200)
