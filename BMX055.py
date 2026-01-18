@@ -1,6 +1,7 @@
 # BMX055.py
 from machine import I2C
 import time
+import math
 
 class BMX055:
     def __init__(self, i2c, addr_acc=0x19, addr_gyro=0x69, addr_mag=0x13):
@@ -86,3 +87,21 @@ class BMX055:
         if z > 16383: z -= 32768
 
         return x, y, z
+    
+    def orientation(self):
+        ax, ay, az = self.accel
+        mx, my, mz = self.mag
+
+        roll = math.atan2(ay, az)
+        pitch = math.atan2(-ax, math.sqrt(ay * ay + az * az))
+
+        mag_x = mx * math.cos(pitch) + mz * math.sin(pitch)
+        mag_y = mx * math.sin(roll) * math.sin(pitch) + my * math.cos(roll) - mz * math.sin(roll) * math.cos(pitch)
+        
+        yaw = math.atan2(-mag_y, mag_x)
+
+        roll = math.degrees(roll)
+        pitch = math.degrees(pitch)
+        yaw = math.degrees(yaw)
+
+        return roll, pitch, yaw
